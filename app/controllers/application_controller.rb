@@ -9,4 +9,12 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [:name])
   end
 
+  def authorize_admin
+    if current_user.is_admin
+      return true
+    else
+      return false
+    end
+  end
+
 end

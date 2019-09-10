@@ -10,10 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140224203311) do
+ActiveRecord::Schema.define(version: 20190910183011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "nfl_matchups", force: :cascade do |t|
+    t.integer  "season_year",       null: false
+    t.integer  "home_team_id",      null: false
+    t.integer  "away_team_id",      null: false
+    t.integer  "week",              null: false
+    t.datetime "game_start_time"
+    t.integer  "matchup_winner_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string   "name",       default: "", null: false
+    t.string   "shortname",  default: "", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_matchup_selections", force: :cascade do |t|
+    t.integer  "user_id",            null: false
+    t.integer  "nfl_matchup_id",     null: false
+    t.integer  "selected_winner_id"
+    t.integer  "confidence_points"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "user_matchups", force: :cascade do |t|
+    t.integer "player_one_id",     null: false
+    t.integer "player_two_id",     null: false
+    t.integer "week",              null: false
+    t.integer "season_year",       null: false
+    t.integer "matchup_winner_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false

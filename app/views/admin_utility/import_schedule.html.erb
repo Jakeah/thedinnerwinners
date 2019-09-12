@@ -1,0 +1,38 @@
+<p id="notice"><%= notice %></p>
+
+<h4>Import Schedule</h4>
+<%= form_tag admin_utility_import_schedule_csv_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <input type="hidden" name="csv" value="true">
+  <br>
+  <%= submit_tag "Import CSV", class: "btn btn-primary" %>
+<% end %>
+
+<br>
+
+<h2>This Year's Schedule</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Home Team</th>
+      <th>Away Team</th>
+      <th>Week</th>
+      <th>Game Time</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @nfl_matchups.each do |matchup| %>
+      <tr>
+        <td><%= matchup.home_team.name %></td>
+        <td><%= matchup.away_team.name %></td>
+        <td><%= matchup.week %></td>
+        <td><%= matchup.game_start_time %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+

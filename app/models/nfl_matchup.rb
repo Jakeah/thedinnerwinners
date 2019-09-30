@@ -6,7 +6,7 @@ class NflMatchup < ApplicationRecord
   # away_team_id       :integer   null: false
   # week               :integer   null: false
   # game_start_time    :datetime
-  # matchup_winner_id  :datetime
+  # matchup_winner_id  :integer
 
   belongs_to :home_team, class_name: 'Team', foreign_key: 'home_team_id'
   belongs_to :away_team, class_name: 'Team', foreign_key: 'away_team_id'

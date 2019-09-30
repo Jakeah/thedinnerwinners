@@ -1,0 +1,68 @@
+<h4>Set Picks for Week: <%= @week %></h4>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Away Team</th>
+      <th>Home Team</th>
+      <th>Points</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if @user_matchup_selections.count > 1 %>
+      <form action="/my_picks/<%= @week %>/update"  method="put">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <% @user_matchup_selections.each do |matchup| %>
+        <tr>
+          <td>
+            <label class="radio-inline">
+              <input class="table-radio-button" 
+                     type="radio" name="user_matchup_winner[<%= matchup.id %>]" 
+                     value="<%= matchup.nfl_matchup.away_team.id %>"
+                     <%= matchup.selected_winner_id == matchup.nfl_matchup.away_team.id ? 'checked="checked"' : '' %> >
+          &nbsp;&nbsp;<%= matchup.nfl_matchup.away_team.name %>
+            </label>
+          </td>
+          <td>
+            <label class="radio-inline">
+              <input class="table-radio-button" 
+                     type="radio" name="user_matchup_winner[<%= matchup.id %>]" 
+                     value="<%= matchup.nfl_matchup.home_team.id %>"
+                     <%= matchup.selected_winner_id == matchup.nfl_matchup.home_team.id ? 'checked="checked"' : '' %> >
+            &nbsp;&nbsp;<%= matchup.nfl_matchup.home_team.name %>
+            </label>
+          </td>
+          <td><input name="user_matchup_points[<%= matchup.id %>]" type="number" min="1" max="<%= @max_confidence_points %>" value="<%= matchup.confidence_points %>"></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <form action="/my_picks/<%= @week %>/create_new"  method="post">
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <% @nfl_matchups.each do |matchup| %>
+        <tr>
+          <td>
+            <label class="radio-inline">
+              <input class="table-radio-button" type="radio" name="matchup_winner[<%= matchup.id %>]" value="<%= matchup.away_team.id %>">
+          &nbsp;&nbsp;<%= matchup.away_team.name %>
+            </label>
+          </td>
+          <td>
+            <label class="radio-inline">
+              <input class="table-radio-button" type="radio" name="matchup_winner[<%= matchup.id %>]" value="<%= matchup.home_team.id %>">
+            &nbsp;&nbsp;<%= matchup.home_team.name %>
+            </label>
+          </td>
+          <td><input name="matchup_points[<%= matchup.id %>]" type="number" min="1" max="<%= @max_confidence_points %>"></td>
+        </tr>
+      <% end %>
+    <% end %>
+      <tr>
+        <td colspan="3">
+          <button id="picks_submit" class="btn btn-success">Submit</button>
+        </td>
+      </tr>
+    </form>
+  </tbody>
+</table>
+

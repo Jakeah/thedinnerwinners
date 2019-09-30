@@ -16,6 +16,7 @@ class MyPicksController < ApplicationController
   def create_new
     @week = params[:id].to_i
     @nfl_matchups = NflMatchup.where(week: @week, season_year: Date.today.year)
+    @max_confidence_points = @nfl_matchups.count
     if !params[:matchup_winner].blank? && @nfl_matchups.count == params[:matchup_points].count
       params[:matchup_winner].each do |nfl_matchup_id, val|
         ums = UserMatchupSelection.create(
@@ -27,12 +28,14 @@ class MyPicksController < ApplicationController
           confidence_points: params[:matchup_points][nfl_matchup_id]
         )
       end
+      @user_matchup_selections = UserMatchupSelection.where(user_id: current_user.id, week: @week, season_year: Date.today.year).order(nfl_matchup_id: 'asc')
+      flash[:notice] = "Successfully submitted picks for week #{@week}"
+      render :show
     else
       flash[:warning] = "MATHCUP WINNER BLANK OR COUNT OFF"
       render :show
     end
 
-    redirect_to action: :show
   end
 
   def update

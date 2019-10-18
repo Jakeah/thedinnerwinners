@@ -1,6 +1,15 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
+  after_filter :clear_xhr_flash
+
+
+  def clear_xhr_flash
+    if request.xhr?
+      # Also modify 'flash' to other attributes which you use in your common/flashes for js
+      flash.discard
+    end
+  end
 
   protected
 

@@ -64,6 +64,29 @@
         </td>
       </tr>
   <% else %>
+    <% @user_matchup_selections.each do |matchup| %>
+      <tr>
+        <td>
+          <label class="radio-inline">
+            <input class="table-radio-button" 
+                    type="radio" name="user_matchup_winner[<%= matchup.id %>]" 
+                    value="<%= matchup.nfl_matchup.away_team.id %>"
+                    <%= matchup.selected_winner_id == matchup.nfl_matchup.away_team.id ? 'checked="checked"' : '' %> >
+        &nbsp;&nbsp;<%= matchup.nfl_matchup.away_team.name %>
+          </label>
+        </td>
+        <td>
+          <label class="radio-inline">
+            <input class="table-radio-button" 
+                    type="radio" name="user_matchup_winner[<%= matchup.id %>]" 
+                    value="<%= matchup.nfl_matchup.home_team.id %>"
+                    <%= matchup.selected_winner_id == matchup.nfl_matchup.home_team.id ? 'checked="checked"' : '' %> >
+          &nbsp;&nbsp;<%= matchup.nfl_matchup.home_team.name %>
+          </label>
+        </td>
+        <td><input name="user_matchup_points[<%= matchup.id %>]" type="number" min="1" max="<%= @max_confidence_points %>" value="<%= matchup.confidence_points %>"></td>
+      </tr>
+    <% end %>
   <% end %>
     </form>
   </tbody>

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :my_picks do
     member do
       post :create_new
-      put :update
+      post :update_picks
     end
     
     collection do

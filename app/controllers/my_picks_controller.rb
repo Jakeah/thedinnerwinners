@@ -32,14 +32,27 @@ class MyPicksController < ApplicationController
       flash[:notice] = "Successfully submitted picks for week #{@week}"
       render :show
     else
-      flash[:warning] = "MATHCUP WINNER BLANK OR COUNT OFF"
+      flash[:warning] = "MATCHUP WINNER BLANK OR NOT ALL PICKS HAVE POINTS"
       render :show
     end
 
   end
 
-  def update
+  def update_picks
     @week = params[:id].to_i
+    @nfl_matchups = NflMatchup.where(week: @week, season_year: Date.today.year)
+    @max_confidence_points = @nfl_matchups.count
+    @user_matchup_selections = UserMatchupSelection.where(user_id: current_user.id, week: @week, season_year: Date.today.year).order(nfl_matchup_id: 'asc')
+    params[:user_matchup_winner].each do |selection_id, val|
+      user_matchup_selection = UserMatchupSelection.find(selection_id.to_i)
+      user_matchup_selection.selected_winner_id = val.to_i
+      user_matchup_selection.confidence_points = params[:user_matchup_points][selection_id].to_i
+      unless user_matchup_selection.save
+        flash[:warning] = 'Error updating picks'
+      end
+    end
+      flash[:notice] = "Successfully updated picks for week #{@week}"
+      render :show
   end
 
 

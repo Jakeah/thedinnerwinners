@@ -10,8 +10,9 @@
   </thead>
 
   <tbody>
+  <% if DateTime.now < @nfl_matchups.first.game_start_time %>
     <% if @user_matchup_selections.count > 1 %>
-      <form action="/my_picks/<%= @week %>/update"  method="put">
+      <form action="/my_picks/<%= @week %>/update_picks"  method="post">
       <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
       <% @user_matchup_selections.each do |matchup| %>
         <tr>
@@ -62,6 +63,8 @@
           <button id="picks_submit" class="btn btn-success">Submit</button>
         </td>
       </tr>
+  <% else %>
+  <% end %>
     </form>
   </tbody>
 </table>
